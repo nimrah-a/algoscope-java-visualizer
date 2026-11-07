@@ -5,7 +5,6 @@
 
 ![Java 17](https://img.shields.io/badge/Java-17%2B-blue) ![UI](https://img.shields.io/badge/UI-Java%20Swing-44bc9a) ![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF) ![License](https://img.shields.io/badge/License-MIT-green)
 
-![AlgoScope desktop application screenshot](docs/algoscope-preview.png)
 
 > **Educational portfolio project:** Uses randomly generated sample values. No external libraries, internet access, API keys, or database are required.
 
