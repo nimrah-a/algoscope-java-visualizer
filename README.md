@@ -1,6 +1,8 @@
 # AlgoScope — Interactive Java Algorithm Visualizer
 [![Java Tests](https://github.com/nimrah-a/algoscope-java-visualizer/actions/workflows/java-ci.yml/badge.svg)](https://github.com/nimrah-a/algoscope-java-visualizer/actions/workflows/java-ci.yml)
 
+![AlgoScope Interactive Algorithm Visualizer](algoscope-dashboard.png)
+
 **Explore how algorithms actually work.** AlgoScope is an interactive desktop application written in **Java 17 and Swing**. It animates sorting and binary search step by step, tracks comparisons and array writes, and compares multiple algorithms on the exact same dataset.
 
 ![Java 17](https://img.shields.io/badge/Java-17%2B-blue) ![UI](https://img.shields.io/badge/UI-Java%20Swing-44bc9a) ![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF) ![License](https://img.shields.io/badge/License-MIT-green)
