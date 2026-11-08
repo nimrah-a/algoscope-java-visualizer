@@ -306,5 +306,3 @@ public final class MainWindow extends JFrame {
         JOptionPane.showMessageDialog(this, pane, "Compare sorting algorithms", JOptionPane.PLAIN_MESSAGE);
     }
 }
-
-
