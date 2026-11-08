@@ -36,11 +36,11 @@ public final class MainWindow extends JFrame {
     public MainWindow() {
         super("AlgoScope — Algorithm Visualizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(880, 690));
-        setSize(1090, 830);
+        setMinimumSize(new Dimension(1000, 720));
+        setSize(1180, 860);
         setLocationRelativeTo(null);
         getContentPane().setBackground(Theme.BG);
-        setLayout(new BorderLayout(0, 12));
+        setLayout(new BorderLayout(0, 16));
         getRootPane().setBorder(BorderFactory.createEmptyBorder(20, 23, 20, 23));
 
         timer = new Timer(delay(), e -> advance());
@@ -60,8 +60,10 @@ public final class MainWindow extends JFrame {
     }
 
     private JPanel makeHeader() {
-        JPanel header = new JPanel(new BorderLayout(0, 7));
+        JPanel header = new JPanel(new BorderLayout(0, 14));
         header.setOpaque(false);
+        // Keep the heading and descriptive sentence away from the window edges.
+        header.setBorder(BorderFactory.createEmptyBorder(18, 22, 20, 22));
         title.setFont(Theme.FONT_TITLE);
         title.setForeground(Theme.TEXT);
         header.add(title, BorderLayout.NORTH);
@@ -75,29 +77,38 @@ public final class MainWindow extends JFrame {
         root.setOpaque(false);
         JPanel options = Theme.card(new GridLayout(2, 1, 0, 12));
         JPanel firstLine = horizontal();
-        firstLine.add(Theme.label("Algorithm"));
-        firstLine.add(algorithmBox);
-        firstLine.add(Box.createHorizontalStrut(10));
-        firstLine.add(Theme.label("Dataset"));
-        firstLine.add(shapeBox);
-        firstLine.add(Box.createHorizontalStrut(10));
-        firstLine.add(Theme.label("Size"));
-        firstLine.add(sizeInput);
+        firstLine.add(labeledControl("Algorithm", algorithmBox));
+        firstLine.add(Box.createHorizontalStrut(28));
+        firstLine.add(labeledControl("Dataset", shapeBox));
+        firstLine.add(Box.createHorizontalStrut(28));
+        firstLine.add(labeledControl("Size", sizeInput));
+        firstLine.add(Box.createHorizontalGlue());
         options.add(firstLine);
+
         JPanel secondLine = horizontal();
         JButton shuffle = Theme.button("↻ New dataset", false);
         shuffle.addActionListener(e -> regenerate(true));
         secondLine.add(shuffle);
-        secondLine.add(Box.createHorizontalStrut(10));
-        secondLine.add(Theme.label("Search target"));
-        secondLine.add(targetInput);
-        secondLine.add(Box.createHorizontalStrut(10));
-        secondLine.add(Theme.label("Animation speed"));
-        secondLine.add(speedSlider);
+        secondLine.add(Box.createHorizontalStrut(28));
+        secondLine.add(labeledControl("Search target", targetInput));
+        secondLine.add(Box.createHorizontalStrut(28));
+        secondLine.add(labeledControl("Animation speed", speedSlider));
+        secondLine.add(Box.createHorizontalGlue());
+        options.add(secondLine);
         for (JComponent comp : List.of(algorithmBox, shapeBox, sizeInput, targetInput, speedSlider)) Theme.configureComponent(comp);
         speedSlider.setPreferredSize(new Dimension(125, 29));
         secondLine.add(Box.createHorizontalGlue());
         options.add(secondLine);
+        Theme.styleCombo(algorithmBox);
+        Theme.styleCombo(shapeBox);
+        Theme.styleSpinner(sizeInput);
+        Theme.styleSpinner(targetInput);
+        algorithmBox.setPreferredSize(new Dimension(190, 38));
+        shapeBox.setPreferredSize(new Dimension(170, 38));
+        sizeInput.setPreferredSize(new Dimension(80, 38));
+        targetInput.setPreferredSize(new Dimension(110, 38));
+        speedSlider.setOpaque(false);
+        speedSlider.setForeground(Theme.BLUE);
         root.add(options, BorderLayout.NORTH);
 
         JPanel chartCard = Theme.card(new BorderLayout(0, 11));
@@ -116,6 +127,16 @@ public final class MainWindow extends JFrame {
         return root;
     }
 
+    /** Pair a control with its label using consistent spacing across both rows. */
+    private static JPanel labeledControl(String caption, JComponent control) {
+        JPanel group = horizontal();
+        JLabel label = Theme.label(caption);
+        group.add(label);
+        group.add(Box.createHorizontalStrut(14));
+        group.add(control);
+        return group;
+    }
+
     private JComponent coloredKey(Color color, String text) {
         JLabel l = Theme.label("● " + text);
         l.setForeground(color);
@@ -127,7 +148,8 @@ public final class MainWindow extends JFrame {
     private JPanel makeFooter() {
         JPanel root = new JPanel(new BorderLayout(0, 12));
         root.setOpaque(false);
-        JPanel stats = Theme.card(new GridLayout(1, 3, 10, 0));
+        JPanel stats = new JPanel(new GridLayout(1, 3, 12, 0));
+        stats.setOpaque(false);
         stats.add(statCard("COMPARISONS", countLabel));
         stats.add(statCard("ARRAY WRITES", writeLabel));
         stats.add(statCard("CURRENT STEP", stepLabel));
@@ -147,7 +169,7 @@ public final class MainWindow extends JFrame {
         actions.add(Box.createHorizontalGlue());
         actions.add(progressLabel);
         lower.add(actions, BorderLayout.NORTH);
-        progress.setForeground(Theme.GREEN);
+        progress.setForeground(Theme.BLUE);
         progress.setBackground(Theme.FIELD);
         progress.setBorderPainted(false);
         lower.add(progress, BorderLayout.CENTER);
@@ -163,12 +185,15 @@ public final class MainWindow extends JFrame {
     }
 
     private JPanel statCard(String name, JLabel value) {
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.setOpaque(false);
+        JPanel panel = Theme.card(new GridLayout(2, 1, 0, 5));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Theme.GRID),
+                BorderFactory.createEmptyBorder(12, 17, 12, 17)));
         JLabel caption = Theme.label(name);
         caption.setForeground(Theme.MUTED);
         caption.setFont(Theme.FONT_SMALL);
-        value.setFont(Theme.FONT_HEADER);
+        value.setFont(Theme.FONT_HEADER.deriveFont(24f));
+        value.setForeground(Theme.TEXT);
         panel.add(caption);
         panel.add(value);
         return panel;
@@ -281,3 +306,5 @@ public final class MainWindow extends JFrame {
         JOptionPane.showMessageDialog(this, pane, "Compare sorting algorithms", JOptionPane.PLAIN_MESSAGE);
     }
 }
+
+
